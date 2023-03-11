@@ -104,11 +104,15 @@ export default class i3Status {
             config.interval = (config.interval || this.config.main.interval) * 1000;
 
             //prepare default output
-            var output = {
+            const defaultOutput = this.config.default ?
+                Object.assign({}, this.config.default) : {};
+            var output = Object.assign(defaultOutput, {
                 name: config.name,
                 color: config.color || this.config.main.color,
-                background: config.background || this.config.main.background
-            };
+                background: config.background || this.config.main.background,
+                align: config.align || this.config.main.align,
+                min_width: config.min_width || this.config.main.min_width,
+            });
 
             //load block
             if (config.type) {
@@ -201,6 +205,8 @@ export default class i3Status {
             line.short_text = label + ' ' + line.short_text;
             line.full_text = label + ' ' + line.full_text;
         }
+
+        line.full_text = ' ' + line.full_text + ' ';
 
         this.print();
     }
