@@ -4,7 +4,7 @@
 
 import { EventEmitter } from 'events';
 import logger from 'winston';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 /**
  * Buildin date shows the current date/time in a configurable format.
@@ -23,6 +23,7 @@ export default class Date extends EventEmitter {
 
         //custom config
         this.format = options.format || 'MMM DD HH:mm';
+        this.timezone = options.timezone || null;
     }
 
     /**
@@ -31,7 +32,9 @@ export default class Date extends EventEmitter {
      */
     update() {
         //update output
-        var date = moment().format(this.format);
+        var date = moment();
+        if ( this.timezone !== null ) date = date.tz(this.timezone);
+        date = date.format(this.format);
         this.output.full_text = date;
         this.output.short_text = date;
 
